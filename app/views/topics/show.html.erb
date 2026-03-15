@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="header">
+    <div class="brand">Learn Cards</div>
+    <div class="nav">
+      <%= link_to "今日のテーマ", root_path, class: "btn btn-ghost" %>
+      <%= link_to "履歴", histories_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+
+  <div class="card">
+    <h1 class="h1"><%= @topic.title %></h1>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <span class="badge">タイプ：<%= @topic.topic_type %></span>
+      <span class="badge">状態：<%= @topic.status %></span>
+    </div>
+
+    <div class="hr"></div>
+
+    <h2 class="h2">概要</h2>
+    <p><%= simple_format(@topic.summary) %></p>
+
+    <h2 class="h2">実装/理解ステップ</h2>
+    <pre class="code"><%= @topic.steps %></pre>
+
+    <h2 class="h2">深掘り</h2>
+    <p><%= simple_format(@topic.deep_dive) %></p>
+
+    <h2 class="h2">参考リンク</h2>
+    <ul class="list">
+      <% Array(@topic.references).each do |url| %>
+        <li><%= link_to url, url, target: "_blank", rel: "noopener" %></li>
+      <% end %>
+    </ul>
+
+    <div class="hr"></div>
+
+    <%= button_to "理解した（履歴にチェック）", understand_topic_path(@topic), method: :post, class: "btn btn-primary" %>
+  </div>
+</div>

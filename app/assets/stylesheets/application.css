@@ -1,0 +1,191 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ /* app/assets/stylesheets/app.css */
+
+/* ---- base ---- */
+:root{
+    --bg: #fbf2e2;
+    --card: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --shadow: 0 10px 20px rgba(0,0,0,0.06);
+    --radius: 14px;
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+a{
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+
+.container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* ---- layout ---- */
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.brand{
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.nav{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---- components ---- */
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.card + .card{ margin-top: 14px; }
+
+.h1{
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+.h2{
+  font-size: 16px;
+  margin: 18px 0 8px;
+  color: #111827;
+}
+
+.meta{
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fafafa;
+  color: #374151;
+}
+
+.hr{
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 16px 0;
+}
+
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.05s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover{ background: #f9fafb; }
+.btn:active{ transform: scale(0.98); }
+
+.btn-primary{
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover{
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-ghost{
+  background: transparent;
+}
+
+pre.code{
+  background: #0b1020;
+  color: #e5e7eb;
+  padding: 14px;
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.list{
+  margin: 0;
+  padding-left: 18px;
+}
+
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.table th, .table td{
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-size: 14px;
+}
+.table th{
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 700;
+}
+.table tr:last-child td{ border-bottom: none; }
+
+/* small screens */
+@media (max-width: 520px){
+  .h1{ font-size: 20px; }
+  .card{ padding: 14px; }
+  .btn{ width: 100%; }
+  .nav{ width: 100%; }
+}

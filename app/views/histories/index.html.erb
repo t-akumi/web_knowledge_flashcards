@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="header">
+    <div class="brand">Learn Cards</div>
+    <div class="nav">
+      <%= link_to "今日のテーマ", root_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+
+  <div class="card">
+    <h1 class="h1">履歴</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>日時</th>
+          <th>テーマ</th>
+          <th>理解</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @histories.each do |h| %>
+          <tr>
+            <td><%= h.viewed_at.strftime("%Y-%m-%d %H:%M") %></td>
+            <td><%= h.topic.title %></td>
+            <td><%= h.understood ? "✅" : "—" %></td>
+            <td><%= link_to "開く", topic_path(h.topic) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
