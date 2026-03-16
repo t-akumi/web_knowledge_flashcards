@@ -9,3 +9,6 @@ bundle exec rails assets:clean
 
 # DBマイグレーション（本番は必須）
 bundle exec rails db:migrate
+
+# AI使用なし用のシード
+bundle exec rails db:seed
