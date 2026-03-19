@@ -3,6 +3,8 @@
     <div class="brand">Learn Cards</div>
     <div class="nav">
       <%= link_to "今日のテーマ", root_path, class: "btn btn-ghost" %>
+      <%= link_to "次のテーマ（概念）", next_topics_path(current_id: @topic.id, type: "concept"), class: "btn" %>
+      <%= link_to "次のテーマ（実装）", next_topics_path(current_id: @topic.id, type: "implementation"), class: "btn" %>
       <%= link_to "履歴", histories_path, class: "btn btn-ghost" %>
     </div>
   </div>

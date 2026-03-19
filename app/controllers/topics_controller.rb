@@ -20,4 +20,28 @@ class TopicsController < ApplicationController
   
     redirect_to histories_path
   end
+
+  def next
+    current_id = params[:current_id].to_i
+    requested_type = params[:type].presence
+  
+    scope = Topic.where(category: "web_basics")
+    scope = scope.where.not(id: current_id) if current_id > 0
+  
+    # concept / implementation だけ許可（変な値は無視）
+    if %w[concept implementation].include?(requested_type)
+      scope = scope.where(topic_type: requested_type)
+    end
+  
+    topic = scope.order(Arel.sql("RANDOM()")).first
+  
+    if topic
+      redirect_to topic_path(topic)
+    else
+      # 条件に合うものがない場合は、タイプ無視で次を出す（or 元に戻す）
+      fallback = Topic.where(category: "web_basics").where.not(id: current_id).order(Arel.sql("RANDOM()")).first
+      redirect_to fallback ? topic_path(fallback) : topic_path(current_id)
+    end
+  end
+  
 end
