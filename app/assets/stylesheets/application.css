@@ -189,3 +189,16 @@ pre.code{
   .btn{ width: 100%; }
   .nav{ width: 100%; }
 }
+
+/* home/show　トピックタイプにより色分け */
+.badge-concept{
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #3730a3;
+  }
+  .badge-impl{
+    background: #ecfeff;
+    border-color: #a5f3fc;
+    color: #155e75;
+  }
+  

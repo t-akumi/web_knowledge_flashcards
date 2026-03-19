@@ -11,7 +11,8 @@
     <h1 class="h1"><%= @topic.title %></h1>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <span class="badge">タイプ：<%= @topic.topic_type %></span>
+      <% badge_class = @topic.topic_type == "implementation" ? "badge badge-impl" : "badge badge-concept" %>
+      <span class="<%= badge_class %>">タイプ：<%= @topic.topic_type_label %></span>
       <span class="badge">状態：<%= @topic.status %></span>
     </div>
 

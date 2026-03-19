@@ -10,7 +10,11 @@
     <h1 class="h1">今日のテーマ</h1>
 
     <% if @topic %>
-      <p><strong><%= @topic.title %></strong></p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <strong><%= @topic.title %></strong>
+        <% badge_class = @topic.topic_type == "implementation" ? "badge badge-impl" : "badge badge-concept" %>
+        <span class="<%= badge_class %>">タイプ：<%= @topic.topic_type_label %></span>
+      </div>
       <p class="meta">カテゴリ：Web基礎</p>
 
       <div class="hr"></div>
