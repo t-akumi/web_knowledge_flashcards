@@ -3,7 +3,7 @@ class Topic < ApplicationRecord
         "concept" => "概念",
         "implementation" => "実装"
       }.freeze
-    
+
       def topic_type_label
         TOPIC_TYPE_LABELS[topic_type] || topic_type
       end
