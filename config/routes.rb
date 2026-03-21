@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   resources :topics, only: [:show] do
     post :understand, on: :member
-    get :next, on: :collection
+    get :next_no_understood, on: :collection
+    get :next_new, on: :collection
   end
 
   resources :histories, only: [:index]
