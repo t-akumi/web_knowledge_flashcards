@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="card">
+    <h1 class="h1">新しい内容がありません</h1>
+    <p class="meta">
+      すべてのテーマを一通り確認済みです。<br>
+      追加テーマを投入するか、復習モード（未理解ランダム）を使ってください。
+    </p>
+
+    <div class="hr"></div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <%= link_to "復習する", next_no_understood_topics_path, class: "btn btn-primary" %>
+      <%= link_to "今日のテーマへ戻る", root_path, class: "btn" %>
+      <%= link_to "履歴を見る", histories_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+</div>
