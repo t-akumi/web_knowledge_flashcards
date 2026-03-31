@@ -6,14 +6,14 @@ class TopicsController < ApplicationController
     TopicContentGenerator.call(@topic) if @topic.status != "generated"
 
     # 履歴を残す
-    history = History.find_or_initialize_by(topic: @topic)
+    history = current_user.histories.find_or_initialize_by(topic: @topic)
     history.viewed_at = Time.current
     history.save!
   end
 
   def understand
     topic = Topic.find(params[:id])
-    history = History.find_or_initialize_by(topic: topic)
+    history = current_user.histories.find_or_initialize_by(topic: topic)
     history.viewed_at ||= Time.current
     history.understood = true
     history.save!
@@ -51,18 +51,15 @@ class TopicsController < ApplicationController
     base = base.where.not(id: current_id) if current_id > 0
   
     # 履歴がある & understood=false のみ
-    not_understood = base
-      .joins(:history)
-      .where(histories: { understood: false })
+    not_understood = base.joins(:histories)
+    .where(histories: { user_id: current_user.id, understood: false })
   
     topic = not_understood.order(Arel.sql("RANDOM()")).first
   
     # 0件なら、履歴がある & understood=true（復習）
     if topic.nil?
-      understood = base
-        .joins(:history)
-        .where(histories: { understood: true })
-  
+      understood = base.joins(:histories)
+        .where(histories: { user_id: current_user.id, understood: true })
       topic = understood.order(Arel.sql("RANDOM()")).first
     end
   
@@ -76,9 +73,9 @@ class TopicsController < ApplicationController
     base = Topic.where(category: "web_basics")
     base = base.where.not(id: current_id) if current_id > 0
   
-    unseen = base
-      .left_joins(:history)
-      .where(histories: { id: nil })
+    unseen = base.where.not(
+      id: current_user.histories.select(:topic_id)
+    )
   
     topic = unseen.order(Arel.sql("RANDOM()")).first
   
