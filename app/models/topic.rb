@@ -1,6 +1,6 @@
 class Topic < ApplicationRecord
     
-    has_one :history, dependent: :destroy
+    has_many :history, dependent: :destroy
 
     TOPIC_TYPE_LABELS = {
         "concept" => "概念",
