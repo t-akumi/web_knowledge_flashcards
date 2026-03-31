@@ -19,7 +19,7 @@
 
   <body>
     <% if user_signed_in? && current_user.admin? %>
-      <%= link_to "管理者", admin_root_path, class: "btn" %>
+      <%= link_to "管理者", admin_topic_candidates_path, class: "btn" %>
     <% end %>
     <%= yield %>
   </body>

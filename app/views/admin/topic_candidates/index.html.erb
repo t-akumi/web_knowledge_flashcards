@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="header">
+    <div class="brand">Admin</div>
+    <div class="nav">
+      <%= link_to "トップ", root_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+
+  <div class="card">
+    <h1 class="h1">テーマ候補</h1>
+
+    <% if notice %><p class="meta"><%= notice %></p><% end %>
+    <% if alert %><p class="meta" style="color:#b91c1c;"><%= alert %></p><% end %>
+
+    <div class="hr"></div>
+
+    <%= button_to "候補を10件生成（ダミー）", generate_admin_topic_candidates_path, method: :post, class: "btn btn-primary" %>
+  </div>
+
+  <div class="card">
+    <h2 class="h2">一覧</h2>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>作成</th>
+          <th>タイトル</th>
+          <th>タイプ</th>
+          <th>状態</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @candidates.each do |c| %>
+          <tr>
+            <td><%= c.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+            <td><%= c.title %></td>
+            <td><%= c.topic_type %></td>
+            <td><%= c.status %></td>
+            <td style="display:flex; gap:8px; flex-wrap:wrap;">
+              <% if c.status == "pending" %>
+                <%= button_to "承認→Topicへ追加", approve_admin_topic_candidate_path(c), method: :post, class: "btn btn-primary" %>
+                <%= button_to "却下", reject_admin_topic_candidate_path(c), method: :post, class: "btn" %>
+              <% else %>
+                <span class="meta">—</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
