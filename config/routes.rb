@@ -16,7 +16,17 @@ Rails.application.routes.draw do
   get "home/show"
 
   namespace :admin do
+    get "topic_candidates/index"
     root "dashboard#index"
+    resources :topic_candidates, only: [:index] do
+      collection do
+        post :generate
+      end
+      member do
+        post :approve
+        post :reject
+      end
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
