@@ -2,8 +2,12 @@ class TopicsController < ApplicationController
   def show
     @topic = Topic.find(params[:id])
 
-    # 未生成なら生成（MVPはダミー）
-    TopicContentGenerator.call(@topic) if @topic.status != "generated"
+    begin
+      TopicContentGenerator.call(@topic) if @topic.status != "generated"
+    rescue => e
+      Rails.logger.error("Topic generation failed: #{e.class} #{e.message}")
+      flash.now[:alert] = "内容の自動生成に失敗しました。時間を置いて再度お試しください。"
+    end
 
     # 履歴を残す
     history = current_user.histories.find_or_initialize_by(topic: @topic)
