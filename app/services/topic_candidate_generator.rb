@@ -1,43 +1,99 @@
+require "json"
+require "set"
+
 class TopicCandidateGenerator
-    # ダミー
-    # 後でここをAIに差し替える
-    TITLES = [
-      ["HTTP/1.1 と HTTP/2 の違い", "concept"],
-      ["SameSite Cookie の基礎", "implementation"],
-      ["CSP（Content Security Policy）入門", "implementation"],
-      ["フォーム送信の基本（GET/POSTの違い）", "concept"],
-      ["CSRFトークンが守っているもの", "implementation"],
-      ["ETag と Last-Modified の使い分け", "implementation"],
-      ["URLエンコードと文字化けの基礎", "concept"],
-      ["JWTの落とし穴（保存場所と失効）", "implementation"],
-      ["OAuthの認可コードフロー超概要", "concept"],
-      ["Webhookの再送と冪等性", "implementation"],
-      ["Rate Limit の基本戦略", "implementation"],
-      ["ブラウザの同一生成元ポリシー", "concept"],
-    ].freeze
-  
-    def self.generate!(category:, count:)
-      created = 0
-      existing_titles = Topic.pluck(:title).to_set
-      existing_candidates = TopicCandidate.where(status: "pending").pluck(:title).to_set
-  
-      pool = TITLES.shuffle
-  
-      while created < count && pool.any?
-        title, type = pool.pop
-        next if existing_titles.include?(title)
-        next if existing_candidates.include?(title)
-       # 上記のnext ifは一致する場合、以下の処理をスキップする　　トピックモデルと候補モデルで一致するタイトルがあれば新しい候補として作成しない処理
-        TopicCandidate.create!(
-          category: category,
-          title: title,
-          topic_type: type,
-          status: "pending"
-        )
-        created += 1
-      end
-  
-      created
+  MODEL = "gpt-5-mini" # 安価なmini（後で変更可能）
+  TYPES = %w[concept implementation].freeze
+
+  def self.generate!(category:, count:)
+    raise "OPENAI_API_KEY is missing" if ENV["OPENAI_API_KEY"].to_s.strip.empty?
+
+    existing_titles = Topic.where(category: category).pluck(:title).to_set
+    existing_candidates = TopicCandidate.where(category: category, status: "pending").pluck(:title).to_set
+
+    banned = (existing_titles + existing_candidates).to_a
+
+    schema = {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        candidates: {
+          type: "array",
+          minItems: count,
+          maxItems: count,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              title: { type: "string", minLength: 5, maxLength: 80 },
+              topic_type: { type: "string", enum: TYPES }
+            },
+            required: %w[title topic_type]
+          }
+        }
+      },
+      required: ["candidates"]
+    }
+
+    messages = [
+      {
+        role: "system",
+        content: <<~SYS
+          You are an assistant that proposes unique learning topics about "Web basics".
+          Output must follow the provided JSON Schema strictly.
+          Do NOT include any title that overlaps with the banned list.
+          Titles should be specific and not too broad. Avoid near-duplicates and rephrases.
+        SYS
+      },
+      {
+        role: "user",
+        content: <<~USR
+          Category: #{category}
+          Generate exactly #{count} new topic candidates.
+
+          BANNED TITLES (must not repeat or paraphrase):
+          #{banned.map { |t| "- #{t}" }.join("\n")}
+        USR
+      }
+    ]
+
+    resp = OpenaiClient.client.chat.completions.create(
+      model: MODEL,
+      messages: messages,
+      # Structured Outputs (JSON Schema)
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "topic_candidates",
+          strict: true,
+          schema: schema
+        }
+      }
+    )
+    # Ruby SDK: chat completion result structure
+    content = resp.choices[0].message.content
+    data = JSON.parse(content)
+
+    created = 0
+    data.fetch("candidates").each do |c|
+      title = c.fetch("title").strip
+      type = c.fetch("topic_type")
+
+      next if existing_titles.include?(title)
+      next if existing_candidates.include?(title)
+
+      TopicCandidate.create!(
+        category: category,
+        title: title,
+        topic_type: type,
+        status: "pending"
+      )
+      created += 1
+      break if created >= count
     end
+
+    created
+  rescue JSON::ParserError => e
+    raise "AI response JSON parse failed: #{e.message}"
+  end
 end
-  
