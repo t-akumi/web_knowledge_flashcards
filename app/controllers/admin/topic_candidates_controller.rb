@@ -5,8 +5,10 @@ module Admin
     end
 
     def generate
-      created = TopicCandidateGenerator.generate!(category: "web_basics", count: 10)
-      msg = created > 0 ? "候補を#{created}件生成しました" : "候補を生成できませんでした（被りが多い可能性）"
+      difficulty = params[:difficulty].presence
+      difficulty = "beginner" unless %w[beginner intermediate advanced].include?(difficulty)
+      created = TopicCandidateGenerator.generate!(category: "web_basics", count: 10, difficulty: difficulty)
+      msg = created > 0 ? "候補を#{created}件生成しました（#{difficulty}）" : "候補を生成できませんでした（被りが多い可能性）"
       redirect_to admin_topic_candidates_path, notice: msg
     end
 
@@ -16,6 +18,7 @@ module Admin
       Topic.transaction do
         Topic.find_or_create_by!(category: candidate.category, title: candidate.title) do |t|
           t.topic_type = candidate.topic_type
+          t.difficulty = candidate.difficulty
           t.status = "seeded"
         end
         candidate.update!(status: "approved")

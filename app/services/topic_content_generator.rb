@@ -6,6 +6,18 @@ class TopicContentGenerator
   def self.call(topic)
     return topic if topic.status == "generated"
 
+    difficulty_guide =
+    case topic.difficulty
+    when "beginner"
+      "初心者向け。専門用語は最小限、出す場合は必ず一言で説明。短い文、具体例多め。"
+    when "intermediate"
+      "中級者向け。前提知識あり。落とし穴、実務の観点、比較を入れる。"
+    when "advanced"
+      "上級者向け。仕様・設計判断・トレードオフを重視。"
+    else
+      "初心者向け。"
+    end
+
     schema = {
       type: "object",
       additionalProperties: false,
@@ -39,6 +51,8 @@ class TopicContentGenerator
         content: <<~USR
           Topic title: #{topic.title}
           Topic type: #{topic.topic_type} (concept or implementation)
+          Difficulty: #{topic.difficulty}
+          Writing policy: #{difficulty_guide}
 
           Please generate:
           - summary: 400-600 Japanese characters

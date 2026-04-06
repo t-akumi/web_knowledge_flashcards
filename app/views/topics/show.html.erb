@@ -23,6 +23,15 @@
       <% badge_class = @topic.topic_type == "implementation" ? "badge badge-impl" : "badge badge-concept" %>
       <span class="<%= badge_class %>">タイプ：<%= @topic.topic_type_label %></span>
       <span class="badge">状態：<%= @topic.status %></span>
+      <% diff_class =
+          case @topic.difficulty
+          when "beginner" then "badge badge-beginner"
+          when "intermediate" then "badge badge-intermediate"
+          when "advanced" then "badge badge-advanced"
+          else "badge"
+          end
+      %>
+      <span class="<%= diff_class %>">難易度：<%= @topic.difficulty_label %></span>
     </div>
 
     <div class="hr"></div>
