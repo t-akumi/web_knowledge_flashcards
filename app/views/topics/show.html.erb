@@ -9,6 +9,13 @@
     </div>
   </div>
 
+  <% if flash.now[:alert] %>
+    <div class="card" style="border-color:#fecaca; background:#fff1f2;">
+      <p style="margin:0; color:#b91c1c;"><%= flash.now[:alert] %></p>
+    </div>
+    <div style="height:12px;"></div>
+  <% end %>
+
   <div class="card">
     <h1 class="h1"><%= @topic.title %></h1>
 
@@ -30,11 +37,16 @@
     <p><%= simple_format(@topic.deep_dive) %></p>
 
     <h2 class="h2">参考リンク</h2>
+    <% refs = @topic.official_references %>
+    <% if refs.any? %>
     <ul class="list">
-      <% Array(@topic.references).each do |url| %>
+        <% refs.each do |url| %>
         <li><%= link_to url, url, target: "_blank", rel: "noopener" %></li>
-      <% end %>
+        <% end %>
     </ul>
+    <% else %>
+    <p class="meta">公式リンクが見つかりませんでした。</p>
+    <% end %>
 
     <div class="hr"></div>
 
