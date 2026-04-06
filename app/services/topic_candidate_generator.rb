@@ -39,21 +39,27 @@ class TopicCandidateGenerator
       {
         role: "system",
         content: <<~SYS
-          You are an assistant that proposes unique learning topics about "Web basics".
-          Output must follow the provided JSON Schema strictly.
-          Do NOT include any title that overlaps with the banned list.
-          Titles should be specific and not too broad. Avoid near-duplicates and rephrases.
+            あなたはWeb基礎の学習テーマを提案する編集者です。
+            出力は必ず日本語で、タイトルも日本語のみ（英語のみは禁止）にしてください。
+            既存のタイトル（BANNED）と重複・言い換えは絶対にしないでください。
+            形式は指定されたJSON Schemaに厳密に従ってください。
         SYS
       },
       {
         role: "user",
         content: <<~USR
-          Category: #{category}
-          Difficulty: #{difficulty} (beginner/intermediate/advanced)
-          Generate exactly #{count} new topic candidates.
+            カテゴリ: #{category}
+            難易度: #{difficulty}（beginner/intermediate/advanced）
+            #{count}件の新しいテーマ候補を作ってください。
 
-          BANNED TITLES (must not repeat or paraphrase):
-          #{banned.map { |t| "- #{t}" }.join("\n")}
+            条件:
+            - タイトルは日本語（英語だけのタイトルは禁止。必要なら括弧で英語補足はOK）
+            - 5〜80文字程度
+            - topic_type は concept または implementation
+            - 既存のタイトル（BANNED）と重複・言い換えは禁止
+
+            BANNED TITLES (must not repeat or paraphrase):
+            #{banned.map { |t| "- #{t}" }.join("\n")}
         USR
       }
     ]
