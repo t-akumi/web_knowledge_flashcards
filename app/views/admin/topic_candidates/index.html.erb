@@ -14,7 +14,11 @@
 
     <div class="hr"></div>
 
-    <%= button_to "候補を10件生成（ダミー）", generate_admin_topic_candidates_path, method: :post, class: "btn btn-primary" %>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <%= button_to "候補10件（初級）", generate_admin_topic_candidates_path(difficulty: "beginner"), method: :post, class: "btn btn-primary" %>
+      <%= button_to "候補10件（中級）", generate_admin_topic_candidates_path(difficulty: "intermediate"), method: :post, class: "btn" %>
+      <%= button_to "候補10件（上級）", generate_admin_topic_candidates_path(difficulty: "advanced"), method: :post, class: "btn" %>
+    </div>
   </div>
 
   <div class="card">

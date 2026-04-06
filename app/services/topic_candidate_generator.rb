@@ -5,7 +5,7 @@ class TopicCandidateGenerator
   MODEL = "gpt-5-mini" # 安価なmini（後で変更可能）
   TYPES = %w[concept implementation].freeze
 
-  def self.generate!(category:, count:)
+  def self.generate!(category:, count:, difficulty:)
     raise "OPENAI_API_KEY is missing" if ENV["OPENAI_API_KEY"].to_s.strip.empty?
 
     existing_titles = Topic.where(category: category).pluck(:title).to_set
@@ -49,6 +49,7 @@ class TopicCandidateGenerator
         role: "user",
         content: <<~USR
           Category: #{category}
+          Difficulty: #{difficulty} (beginner/intermediate/advanced)
           Generate exactly #{count} new topic candidates.
 
           BANNED TITLES (must not repeat or paraphrase):
@@ -86,6 +87,7 @@ class TopicCandidateGenerator
         category: category,
         title: title,
         topic_type: type,
+        difficulty: difficulty,
         status: "pending"
       )
       created += 1

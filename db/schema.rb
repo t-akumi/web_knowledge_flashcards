@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_31_143227) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_06_100115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_31_143227) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "difficulty", default: "beginner", null: false
+    t.index ["difficulty"], name: "index_topic_candidates_on_difficulty"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -48,7 +50,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_31_143227) do
     t.datetime "generated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "difficulty", default: "beginner", null: false
     t.index ["category", "title"], name: "index_topics_on_category_and_title", unique: true
+    t.index ["difficulty"], name: "index_topics_on_difficulty"
     t.index ["status"], name: "index_topics_on_status"
   end
 

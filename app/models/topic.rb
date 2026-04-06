@@ -25,6 +25,17 @@ class Topic < ApplicationRecord
         learn.microsoft.com
     ].freeze
 
+    DIFFICULTY_LABELS = {
+        "beginner" => "初級",
+        "intermediate" => "中級",
+        "advanced" => "上級"
+    }.freeze
+
+    def difficulty_label
+        DIFFICULTY_LABELS[difficulty] || difficulty
+    end
+      
+
     def official_references
         Array(references).filter_map do |url|
         begin

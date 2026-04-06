@@ -192,13 +192,28 @@ pre.code{
 
 /* home/show　トピックタイプにより色分け */
 .badge-concept{
-    background: #eef2ff;
-    border-color: #c7d2fe;
-    color: #3730a3;
-  }
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
   .badge-impl{
-    background: #ecfeff;
-    border-color: #a5f3fc;
-    color: #155e75;
-  }
-  
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #155e75;
+}
+
+.badge-beginner{
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+.badge-intermediate{
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+.badge-advanced{
+  background: #fff1f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
